@@ -16,11 +16,11 @@
 (deftest board
   (testing "A valid board must have 9 points"
     (let [point #:point{:neighbours #{} :value nil}]
-      (is (not (s/valid? :board/board (into [] (repeat 7 point)))))
-      (is (not (s/valid? :board/board (into [] (repeat 8 point)))))
-      (is (not (s/valid? :board/board (into [] (repeat 10 point)))))
+      (is (not (s/valid? :game/board (into [] (repeat 7 point)))))
+      (is (not (s/valid? :game/board (into [] (repeat 8 point)))))
+      (is (not (s/valid? :game/board (into [] (repeat 10 point)))))
 
-      (is (s/valid? :board/board (into [] (repeat 9 point)))))))
+      (is (s/valid? :game/board (into [] (repeat 9 point)))))))
 
 (deftest place-piece
   (testing "a piece should be placed into the right position"
@@ -106,7 +106,7 @@
 (deftest take-turn
   (testing "when making the first move"
     (let [new-game {:game/player :white,
-                    :board/board board/empty-board
+                    :game/board board/empty-board
                     :game/pieces [:white :black :white :black :white :black]}
           result (sut/take-turn new-game 0)]
       (testing "next player should be black"
@@ -118,6 +118,6 @@
       (testing "white should be placed at 0"
         (is (= :white
                (-> result
-                   :board/board
+                   :game/board
                    (nth 0)
                    :point/value)))))))

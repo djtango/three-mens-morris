@@ -3,10 +3,10 @@
             [three-mens-morris.core-spec :as specs]))
 
 (s/fdef place-piece
-        :args (s/cat :board :board/board,
+        :args (s/cat :board :game/board,
                      :position :board/position,
                      :piece :point/value)
-        :ret :board/board
+        :ret :game/board
         :fn #(= (get-in (:ret %) [(-> % :args :position) :point/value])
                 (-> % :args :piece)))
 
@@ -14,7 +14,7 @@
   (assoc-in board [position :point/value] piece))
 
 (s/fdef three-in-a-row?
-        :args (s/cat :board :board/board)
+        :args (s/cat :board :game/board)
         :ret (s/nilable boolean?))
 
 (s/fdef same-colour?
@@ -37,7 +37,7 @@
        (some true?)))
 
 (s/fdef three-in-a-column?
-        :args (s/cat :board :board/board)
+        :args (s/cat :board :game/board)
         :ret (s/nilable boolean?))
 
 (defn three-in-a-column? [board]
@@ -50,7 +50,7 @@
          (some true?))))
 
 (s/fdef three-in-a-diagonal?
-        :args (s/cat :board :board/board)
+        :args (s/cat :board :game/board)
         :ret (s/nilable boolean?))
 
 (defn three-in-a-diagonal? [board]
@@ -69,7 +69,7 @@
          (some true?))))
 
 (s/fdef winner?
-        :args (s/cat :board :board/board)
+        :args (s/cat :board :game/board)
         :ret (s/nilable boolean?))
 
 (defn winner? [board]
@@ -93,11 +93,11 @@
     state))
 
 (defn make-move [state position]
-  (let [{board :board/board,
+  (let [{board :game/board,
          player :game/player} state]
     (-> state
         use-piece-from-outside-board
-        (assoc :board/board
+        (assoc :game/board
                (place-piece board position player)))))
 
 (s/fdef take-turn
@@ -114,6 +114,6 @@
                      :move :game/move))
 (defn next-turn [state move]
   (let [next-state (make-move state move)]
-    (if (winner? (:board/board next-state))
+    (if (winner? (:game/board next-state))
       (str (:game/player state) " wins")
       next-state)))

@@ -10,10 +10,10 @@
 
 (s/def :board/point (s/keys :req [:point/neighbours :point/value]))
 
-(s/def :board/board (s/coll-of :board/point :count 9 :into []))
+(s/def :game/board (s/coll-of :board/point :count 9 :into []))
 
 (s/def :game/player #{:white :black})
 
-(s/def :game/state (s/keys :req [:game/player :board/board :game/pieces]))
+(s/def :game/state (s/keys :req [:game/player :game/board :game/pieces]))
 
 (s/def :game/move :board/position)
