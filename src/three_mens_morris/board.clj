@@ -28,4 +28,4 @@
    middle-left  middle         middle-right
    bottom-left  bottom-middle  bottom-right])
 
-(assert (s/valid? :board/board empty-board))
+(assert (s/valid? :game/board empty-board))
