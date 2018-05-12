@@ -105,10 +105,10 @@
 
 (deftest take-turn
   (testing "when making the first move"
-    (let [new-game {:game/player :white,
-                    :game/board board/empty-board
-                    :game/pieces [:white :black :white :black :white :black]}
-          result (sut/take-turn new-game 0)]
+    (let [new-game #:game{:player :white,
+                          :board board/empty-board
+                          :pieces [:white :black :white :black :white :black]}
+          result (sut/take-turn new-game [nil 0])]
       (testing "next player should be black"
         (is (= :black
                (:game/player result))))

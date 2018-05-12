@@ -92,13 +92,13 @@
     (update state :game/pieces subvec 1)
     state))
 
-(defn make-move [state position]
-  (let [{board :game/board,
-         player :game/player} state]
+(defn make-move [state move]
+  (let [{:game/keys [board player]} state
+        [from to] move]
     (-> state
         use-piece-from-outside-board
         (assoc :game/board
-               (place-piece board position player)))))
+               (place-piece board to player)))))
 
 (s/fdef take-turn
         :args (s/cat :state :game/state
