@@ -100,10 +100,23 @@
         (assoc :game/board
                (place-piece board to player)))))
 
+(defn use-available-pieces? [{:game/keys [pieces]} [from _]]
+  (and (seq pieces)
+       (nil? from)))
+
+(defn use-pieces-from-board? [{:game/keys [pieces]} [from _]]
+  (and (empty? pieces)
+       (some? from)))
+
 (s/fdef take-turn
         :args (s/cat :state :game/state
                      :move :game/move)
-        :ret :game/state)
+        :ret :game/state
+        :fn #(let [state (-> % :args :state)
+                   move (-> % :args :move)]
+               (or (pieces-still-available? state move)
+                   (use-pieces-from-board? state move))))
+
 (defn take-turn [state move]
   (-> state
       (make-move move)

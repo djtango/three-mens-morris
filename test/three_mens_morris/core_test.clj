@@ -103,6 +103,16 @@
                              white blank blank]]
           (is (sut/winner? top-row-black)))))))
 
+(deftest use-available-pieces?
+  (is (sut/use-available-pieces? {:game/pieces [:black]} [nil 1]))
+  (is (not (sut/use-available-pieces? {:game/pieces [:black]} [1 1])))
+  (is (not (sut/use-available-pieces? {:game/pieces []} [nil 1]))))
+
+(deftest use-pieces-from-board?
+  (is (sut/use-pieces-from-board? {:game/pieces []} [0 1]))
+  (is (not (sut/use-pieces-from-board? {:game/pieces []} [nil 1])))
+  (is (not (sut/use-pieces-from-board? {:game/pieces [:black]} [nil 1]))))
+
 (deftest take-turn
   (testing "when making the first move"
     (let [new-game #:game{:player :white,
@@ -120,4 +130,17 @@
                (-> result
                    :game/board
                    (nth 0)
-                   :point/value)))))))
+                   :point/value))))))
+
+  (testing "after six turns:"
+    (let [new-game #:game{:player :white,
+                          :board board/empty-board
+                          :pieces [:white :black :white :black :white :black]}
+          mid-game (reduce (fn [acc i]
+                             (sut/take-turn acc [nil i])) new-game (range 6))]
+      (testing "the number of pieces should be empty"
+        (is (empty? (:game/pieces mid-game))))
+      (testing "the current player should be white"
+        (is (= :white (:game/player mid-game))))
+      (testing "the game should crash if nil is supplied as from for the next move"
+        (is (thrown? Exception (sut/take-turn mid-game [nil 6])))))))
