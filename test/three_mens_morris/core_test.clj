@@ -4,7 +4,7 @@
             [three-mens-morris.core-spec :refer :all]
             [clojure.spec.alpha :as s]))
 
-(deftest a-test
+(deftest points
   (testing "A valid point in a board has neighbours and a value"
-    (is (s/valid? :board/point {:point/neighbours 1,
-                                :point/current-piece 2}))))
+    (is (s/valid? :board/point {:point/neighbours #{},
+                                :point/value nil}))))
