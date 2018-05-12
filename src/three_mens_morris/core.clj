@@ -15,7 +15,7 @@
 
 (s/fdef three-in-a-row?
         :args (s/cat :board :board/board)
-        :ret boolean?)
+        :ret (s/nilable boolean?))
 
 (s/fdef same-colour?
         :args (s/cat :points (s/coll-of :point/value))
@@ -36,6 +36,10 @@
        (map same-colour?)
        (some true?)))
 
+(s/fdef three-in-a-column?
+        :args (s/cat :board :board/board)
+        :ret (s/nilable boolean?))
+
 (defn three-in-a-column? [board]
   (let [transpose (partial apply map vector)]
     (->> board
@@ -44,6 +48,10 @@
          transpose
          (map same-colour?)
          (some true?))))
+
+(s/fdef three-in-a-diagonal?
+        :args (s/cat :board :board/board)
+        :ret (s/nilable boolean?))
 
 (defn three-in-a-diagonal? [board]
   "[0 1 2
@@ -59,3 +67,13 @@
           (get-points bottom-left->top-right)]
          (map same-colour?)
          (some true?))))
+
+(s/fdef winner?
+        :args (s/cat :board :board/board)
+        :ret (s/nilable boolean?))
+
+(defn winner? [board]
+  (some true?
+        ((juxt three-in-a-row?
+               three-in-a-column?
+               three-in-a-diagonal?) board)))

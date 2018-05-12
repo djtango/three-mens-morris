@@ -84,3 +84,19 @@
                                    blank white blank,
                                    white blank blank]]
           (is (sut/three-in-a-diagonal? middle-column-white)))))))
+
+(deftest winner?
+  (testing "should return true for three in any line"
+    (let [blank #:point{:neighbours #{} :value nil}
+          white (assoc blank :point/value :white)
+          black (assoc blank :point/value :black)]
+      (testing "checking the \\ diagonal"
+        (let [left-column-white [white blank blank,
+                                 blank white blank,
+                                 blank blank white]]
+          (is (sut/winner? left-column-white))))
+      (testing "checking the top-row"
+        (let [top-row-black [black black black,
+                             blank white blank,
+                             white blank blank]]
+          (is (sut/winner? top-row-black)))))))
