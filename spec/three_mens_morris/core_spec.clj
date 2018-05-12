@@ -5,3 +5,5 @@
 (s/def :point/value #(contains? #{nil :white :black} %))
 
 (s/def :board/point (s/keys :req [:point/neighbours :point/value]))
+
+(s/def :board/board (s/coll-of :board/point :count 9 :into []))
