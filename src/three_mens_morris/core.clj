@@ -44,3 +44,18 @@
          transpose
          (map same-colour?)
          (some true?))))
+
+(defn three-in-a-diagonal? [board]
+  "[0 1 2
+    3 4 5
+    6 7 8]"
+  (let [top-left->bottom-right [0 4 8]
+        bottom-left->top-right [6 4 2]
+
+        get-points (fn [points] (->> points
+                                     (mapv #(nth board %))
+                                     (map :point/value)))]
+    (->> [(get-points top-left->bottom-right),
+          (get-points bottom-left->top-right)]
+         (map same-colour?)
+         (some true?))))

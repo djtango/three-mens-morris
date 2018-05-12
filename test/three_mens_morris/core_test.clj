@@ -69,3 +69,18 @@
                                   blank blank white,
                                   blank blank white]]
           (is (sut/three-in-a-column? right-column-white)))))))
+
+(deftest three-in-a-diagonal?
+  (testing "should return true if there are three pieces in a diagonal"
+    (let [blank #:point{:neighbours #{} :value nil}
+          white (assoc blank :point/value :white)]
+      (testing "checking the \\ diagonal"
+        (let [left-column-white [white blank blank,
+                                 blank white blank,
+                                 blank blank white]]
+          (is (sut/three-in-a-diagonal? left-column-white))))
+      (testing "checking the / diagonal"
+        (let [middle-column-white [blank blank white,
+                                   blank white blank,
+                                   white blank blank]]
+          (is (sut/three-in-a-diagonal? middle-column-white)))))))
