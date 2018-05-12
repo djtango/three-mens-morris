@@ -29,3 +29,24 @@
              (nth result 0)))
       (is (= (subvec board 1)
              (subvec result 1))))))
+
+(deftest three-in-a-row?
+  (testing "should return true if there are three pieces in a row"
+    (let [blank #:point{:neighbours #{} :value nil}
+          white (assoc blank :point/value :white)]
+      (testing "checking the top row:"
+        (let [top-row-white [white white white,
+                             blank blank blank,
+                             blank blank blank]]
+          (is (sut/three-in-a-row? top-row-white))))
+      (testing "checking the middle row:"
+        (let [middle-row-white [blank blank blank,
+                                white white white,
+                                blank blank blank]]
+          (is (sut/three-in-a-row? middle-row-white))))
+      (testing "checking the bottom row:"
+        (let [bottom-row-white [blank blank blank,
+                                blank blank blank,
+                                white white white]]
+          (is (sut/three-in-a-row? bottom-row-white)))))))
+

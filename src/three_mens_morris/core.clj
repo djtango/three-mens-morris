@@ -12,3 +12,26 @@
 
 (defn place-piece [board position piece]
   (assoc-in board [position :point/value] piece))
+
+(s/fdef three-in-a-row?
+        :args (s/cat :board :board/board)
+        :ret boolean?)
+
+(s/fdef same-colour?
+        :args (s/cat :points (s/coll-of :point/value))
+        :ret boolean?)
+
+(defn same-colour? [points]
+  (let [all-same? (fn [colour] (apply = colour points))]
+    (or (all-same? :white)
+        (all-same? :black))))
+
+(defn group-horizontally [board]
+  (partition 3 board))
+
+(defn three-in-a-row? [board]
+  (->> board
+       (map :point/value)
+       group-horizontally
+       (map same-colour?)
+       (some true?)))
