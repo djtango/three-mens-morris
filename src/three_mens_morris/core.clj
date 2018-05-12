@@ -7,8 +7,8 @@
                      :position :board/position,
                      :piece :point/value)
         :ret :board/board
-        :fn #(= (get-in (:ret %) [(:position %) :point/value])
-                (:piece %)))
+        :fn #(= (get-in (:ret %) [(-> % :args :position) :point/value])
+                (-> % :args :piece)))
 
 (defn place-piece [board position piece]
   (assoc-in board [position :point/value] piece))

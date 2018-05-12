@@ -5,7 +5,9 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
   :dependencies [[org.clojure/clojure "1.9.0"]
-                 [midje "1.9.0-alpha6"]]
+                 [midje "1.9.0-alpha6"]
+                 [org.clojure/test.check "0.9.0"]
+                 [orchestra "2017.11.12-1"]]
 
   :plugins [[lein-midje "3.1.1"]]
 

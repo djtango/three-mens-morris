@@ -2,8 +2,10 @@
   (:require [clojure.test :refer :all]
             [three-mens-morris.core :as sut]
             [three-mens-morris.core-spec :as sut-spec]
-            [clojure.spec.alpha :as s]))
+            [clojure.spec.alpha :as s]
+            [orchestra.spec.test :as stest]))
 
+(stest/instrument)
 (deftest points
   (testing "A valid point in a board has neighbours and a value"
     (is (s/valid? :board/point {:point/neighbours #{},
