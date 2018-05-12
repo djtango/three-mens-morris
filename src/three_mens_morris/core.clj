@@ -35,3 +35,12 @@
        group-horizontally
        (map same-colour?)
        (some true?)))
+
+(defn three-in-a-column? [board]
+  (let [transpose (partial apply map vector)]
+    (->> board
+         (map :point/value)
+         group-horizontally
+         transpose
+         (map same-colour?)
+         (some true?))))

@@ -50,3 +50,22 @@
                                 white white white]]
           (is (sut/three-in-a-row? bottom-row-white)))))))
 
+(deftest three-in-a-column?
+  (testing "should return true if there are three pieces in a column"
+    (let [blank #:point{:neighbours #{} :value nil}
+          white (assoc blank :point/value :white)]
+      (testing "checking the left column:"
+        (let [left-column-white [white blank blank,
+                                 white blank blank,
+                                 white blank blank]]
+          (is (sut/three-in-a-column? left-column-white))))
+      (testing "checking the middle row:"
+        (let [middle-column-white [blank white blank,
+                                   blank white blank,
+                                   blank white blank]]
+          (is (sut/three-in-a-column? middle-column-white))))
+      (testing "checking the bottom row:"
+        (let [right-column-white [blank blank white,
+                                  blank blank white,
+                                  blank blank white]]
+          (is (sut/three-in-a-column? right-column-white)))))))
