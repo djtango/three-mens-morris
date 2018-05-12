@@ -84,11 +84,29 @@
          :white)
        (assoc state :game/player)))
 
+(s/fdef use-piece-from-outside-board
+        :args (s/cat :state :game/state))
+
+(defn use-piece-from-outside-board [state]
+  (if (seq (:game/pieces state))
+    (update state :game/pieces subvec 1)
+    state))
+
+(defn make-move [state position]
+  (let [{board :board/board,
+         player :game/player} state]
+    (-> state
+        use-piece-from-outside-board
+        (assoc :board/board
+               (place-piece board position player)))))
+
 (s/fdef take-turn
         :args (s/cat :state :game/state
-                     :move :game/move))
+                     :move :game/move)
+        :ret :game/state)
 (defn take-turn [state move]
   (-> state
+      (make-move move)
       switch-player))
 
 (s/fdef next-turn

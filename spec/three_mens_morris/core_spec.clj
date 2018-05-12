@@ -14,6 +14,6 @@
 
 (s/def :game/player #{:white :black})
 
-(s/def :game/state (s/keys :req [:game/player :board/board]))
+(s/def :game/state (s/keys :req [:game/player :board/board :game/pieces]))
 
 (s/def :game/move :board/position)

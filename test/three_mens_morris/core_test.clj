@@ -104,9 +104,20 @@
           (is (sut/winner? top-row-black)))))))
 
 (deftest take-turn
-  (testing "making a move should change to the next player"
+  (testing "when making the first move"
     (let [new-game {:game/player :white,
-                    :board/board board/empty-board}
+                    :board/board board/empty-board
+                    :game/pieces [:white :black :white :black :white :black]}
           result (sut/take-turn new-game 0)]
-      (is (= :black
-             (:game/player result))))))
+      (testing "next player should be black"
+        (is (= :black
+               (:game/player result))))
+      (testing "white should have 2 pieces left"
+        (is (= [:black :white :black :white :black]
+               (:game/pieces result))))
+      (testing "white should be placed at 0"
+        (is (= :white
+               (-> result
+                   :board/board
+                   (nth 0)
+                   :point/value)))))))
