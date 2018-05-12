@@ -3,9 +3,11 @@
             [three-mens-morris.core :as sut]
             [three-mens-morris.core-spec :as sut-spec]
             [clojure.spec.alpha :as s]
-            [orchestra.spec.test :as stest]))
+            [orchestra.spec.test :as stest]
+            [three-mens-morris.board :as board]))
 
 (stest/instrument)
+
 (deftest points
   (testing "A valid point in a board has neighbours and a value"
     (is (s/valid? :board/point {:point/neighbours #{},
@@ -100,3 +102,11 @@
                              blank white blank,
                              white blank blank]]
           (is (sut/winner? top-row-black)))))))
+
+(deftest take-turn
+  (testing "making a move should change to the next player"
+    (let [new-game {:game/player :white,
+                    :board/board board/empty-board}
+          result (sut/take-turn new-game 0)]
+      (is (= :black
+             (:game/player result))))))

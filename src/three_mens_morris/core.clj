@@ -77,3 +77,25 @@
         ((juxt three-in-a-row?
                three-in-a-column?
                three-in-a-diagonal?) board)))
+
+(defn switch-player [{:as state :game/keys [player]}]
+  (->> (if (= :white player)
+         :black
+         :white)
+       (assoc state :game/player)))
+
+(s/fdef take-turn
+        :args (s/cat :state :game/state
+                     :move :game/move))
+(defn take-turn [state move]
+  (-> state
+      switch-player))
+
+(s/fdef next-turn
+        :args (s/cat :state :game/state
+                     :move :game/move))
+(defn next-turn [state move]
+  (let [next-state (make-move state move)]
+    (if (winner? (:board/board next-state))
+      (str (:game/player state) " wins")
+      next-state)))
