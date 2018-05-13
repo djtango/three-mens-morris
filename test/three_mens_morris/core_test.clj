@@ -143,4 +143,17 @@
       (testing "the current player should be white"
         (is (= :white (:game/player mid-game))))
       (testing "the game should crash if nil is supplied as from for the next move"
-        (is (thrown? Exception (sut/take-turn mid-game [nil 6])))))))
+        (is (thrown? Exception (sut/take-turn mid-game [nil 6]))))
+      (testing "the game should move a piece if an origin is given"
+        (let [reposition-white (sut/take-turn mid-game [0 6])
+              point #(get-in reposition-white [:game/board % :point/value])]
+          (testing "there should be 3 white pieces on the board"
+            (is (= 3 (->> reposition-white :game/board (map :point/value) (filter #{:white}) count))))
+          (testing "there should be 3 black pieces on the board"
+            (is (= 3 (->> reposition-white :game/board (map :point/value) (filter #{:black}) count))))
+          (testing "point 0 should be white for mid-game"
+            (is (= :white (get-in mid-game [:game/board 0 :point/value]))))
+          (testing "point 0 should be nil after moving this piece"
+            (is (= nil (point 0))))
+          (testing "point 6 should be white after using the piece from point 0"
+            (is (= :white (point 6)))))))))

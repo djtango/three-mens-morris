@@ -92,13 +92,25 @@
     (update state :game/pieces subvec 1)
     state))
 
+(defn get-piece [board position]
+  (get-in board [position :point/value]))
+
+(defn move-piece-on-board [board move]
+  (let [[from to] move
+        piece (get-piece board from)]
+    (-> board
+        (place-piece from nil)
+        (place-piece to piece))))
+
 (defn make-move [state move]
   (let [{:game/keys [board player]} state
         [from to] move]
     (-> state
         use-piece-from-outside-board
         (assoc :game/board
-               (place-piece board to player)))))
+               (if (nil? from)
+                 (place-piece board to player)
+                 (move-piece-on-board board move))))))
 
 (defn use-available-pieces? [{:game/keys [pieces]} [from _]]
   (and (seq pieces)
@@ -112,10 +124,11 @@
         :args (s/cat :state :game/state
                      :move :game/move)
         :ret :game/state
-        :fn #(let [state (-> % :args :state)
-                   move (-> % :args :move)]
-               (or (pieces-still-available? state move)
-                   (use-pieces-from-board? state move))))
+        :fn (fn [x]
+              (let [state (-> x :args :state)
+                    move (-> x :args :move)]
+               (or (use-available-pieces? state move)
+                   (use-pieces-from-board? state move)))))
 
 (defn take-turn [state move]
   (-> state

@@ -16,5 +16,5 @@
 
 (s/def :game/state (s/keys :req [:game/player :game/board :game/pieces]))
 
-(s/def :game/move (s/tuple (s/nilable #(s/valid? :board/position))
+(s/def :game/move (s/tuple (s/nilable :board/position)
                            :board/position))
