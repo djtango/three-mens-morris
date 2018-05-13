@@ -145,15 +145,27 @@
       (testing "the game should crash if nil is supplied as from for the next move"
         (is (thrown? Exception (sut/take-turn mid-game [nil 6]))))
       (testing "the game should move a piece if an origin is given"
-        (let [reposition-white (sut/take-turn mid-game [0 6])
+        (let [reposition-white (sut/take-turn mid-game [4 6])
               point #(get-in reposition-white [:game/board % :point/value])]
           (testing "there should be 3 white pieces on the board"
             (is (= 3 (->> reposition-white :game/board (map :point/value) (filter #{:white}) count))))
           (testing "there should be 3 black pieces on the board"
             (is (= 3 (->> reposition-white :game/board (map :point/value) (filter #{:black}) count))))
-          (testing "point 0 should be white for mid-game"
-            (is (= :white (get-in mid-game [:game/board 0 :point/value]))))
-          (testing "point 0 should be nil after moving this piece"
-            (is (= nil (point 0))))
+          (testing "point 4 should be white for mid-game"
+            (is (= :white (get-in mid-game [:game/board 4 :point/value]))))
+          (testing "point 4 should be nil after moving this piece"
+            (is (= nil (point 4))))
           (testing "point 6 should be white after using the piece from point 0"
             (is (= :white (point 6)))))))))
+
+(deftest validating-moves
+  (testing "a piece can only move to a neighbouring point"
+    (let [new-game #:game{:player :white,
+                          :board board/empty-board
+                          :pieces [:white :black :white :black :white :black]}
+          mid-game (reduce (fn [acc i]
+                             (sut/take-turn acc [nil i])) new-game (range 6))
+          top-left 0
+          bottom-right 8
+          illegal-move [top-left bottom-right]]
+      (is (thrown? Exception (sut/take-turn mid-game illegal-move))))))

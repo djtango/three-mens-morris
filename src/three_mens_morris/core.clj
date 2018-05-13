@@ -130,10 +130,25 @@
                (or (use-available-pieces? state move)
                    (use-pieces-from-board? state move)))))
 
+(defn validate-move [state move]
+  (let [[from to] move
+        neighbours (get-in state [:game/board from :point/neighbours])]
+    (if (or (nil? from)
+              (contains? neighbours to))
+      state
+      (throw (Exception.
+               "Cannot move a piece to a non-neighbouring point on the board.")))))
+
 (defn take-turn [state move]
-  (-> state
-      (make-move move)
-      switch-player))
+  (let [[from to] move]
+    (if (or (nil? from)
+            (let [neighbours (get-in state [:game/board from :point/neighbours])]
+              (contains? neighbours to)))
+      (-> state
+          (validate-move move)
+          (make-move move)
+          switch-player)
+      (throw (Exception. "Cannot move a piece to a non-neighbouring point on the board.")))))
 
 (s/fdef next-turn
         :args (s/cat :state :game/state
