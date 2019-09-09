@@ -18,11 +18,13 @@ The board
 
 The board is a three row, three column grid with nine spaces for players' counters to go:
 
+```
 o-o-o
 |\|/|
 o-o-o
 |/|\|
 o-o-o
+```
 
 Game play
 
